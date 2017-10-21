@@ -65,15 +65,16 @@ func CreateAccountObject (ID string, FirstName string, LastName string, StreetNu
 
 type Account struct {
 	ID string 
-	FirstName string 
-	LastName  string 
-	Address
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Address  `json:"address"`
 }
 
 type Address   struct {
-	StreetNumber string 
-	StreetName   string 
-	City         string 
-	State        string 
-	Zip          string 
+	StreetNumber string `json:"street_number"`
+	StreetName   string `json:"street_name"`
+	City         string `json:"city"`
+	State        string `json:"state"`
+	Zip          string `json:"zip"` 
 } 
+
