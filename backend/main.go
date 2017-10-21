@@ -5,14 +5,16 @@ import (
 	"net/http"
 	"encoding/json"
 	"log"
+	"bytes"
     "github.com/gorilla/mux"
 )
 
+var CUST_URL = "http://api.reimaginebanking.com/customers?key=542922f7bba311ded255ef44e29df65f"
 
 func main() {
 	router := mux.NewRouter()
 
-	testAddAccounts()
+	//testAddAccounts()
 	
 	//router.HandleFunc("/account", getAccounts).Methods("GET")
     router.HandleFunc("/account/{collection}/{id}", getAccount).Methods("GET")
@@ -28,7 +30,6 @@ func getAccount(w http.ResponseWriter, r *http.Request) {
 	if (params["collection"] == "loaners") {
 		err := GetLoanersCollection().FindId(params["id"]).One(&result)
 		errCheck(err)
-		fmt.Println(result)
 		json.NewEncoder(w).Encode(result)
 	} else if (params["collection"] == "donors") {
 		err := GetDonorsCollection().FindId(params["id"]).One(&result)
@@ -41,9 +42,31 @@ func getAccount(w http.ResponseWriter, r *http.Request) {
 
 func createAccount(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-    var account Account
-	_ = json.NewDecoder(r.Body).Decode(&account)
-	//TODO set accoutn id to id given by capital 1 here
+    var noIDAccount NoIDAccount
+	_ = json.NewDecoder(r.Body).Decode(&noIDAccount)
+
+//-----------------------Create post request to Nessie-------------------------------------------------------
+
+	var jsonStr, _ = json.Marshal(noIDAccount)
+	fmt.Println(noIDAccount)
+	req, err := http.NewRequest("POST", CUST_URL, bytes.NewBuffer(jsonStr))
+	errCheck(err)
+    req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+	
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	errCheck(err)
+	defer resp.Body.Close()
+	fmt.Println(resp.Body)
+	
+	var response ResponseAccount
+	_ = json.NewDecoder(resp.Body).Decode(&response)
+	fmt.Println(response)
+	account := CreateAccountObject(response.ObjectCreated.ID, noIDAccount.FirstName, noIDAccount.LastName, noIDAccount.StreetNumber,  noIDAccount.StreetName, noIDAccount.City, noIDAccount.State, noIDAccount.Zip)
+  
+//-------------Save it to mongo DB----------------------------------------------------------------------------
+
 	if (params["collection"] == "loaners") {
 		responce, err := GetLoanersCollection().UpsertId(account.ID, account)
 		errCheck(err)
@@ -72,16 +95,7 @@ func deleteAccount(w http.ResponseWriter, r *http.Request) {
 //	json.NewEncoder(w).Encode(item)
 //}
 
-/*func getATMS() {
-	res, err := http.Get("http://api.reimaginebanking.com/atms?key=542922f7bba311ded255ef44e29df65f")
-	errCheck(err)
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	errCheck(err)
-	fmt.Printf("%s\n", string(body))
-}*/
-
-func testAddAccounts() {
+/*func testAddAccounts() {
 	ac1 := CreateAccountObject("1", "Max", "rides", "12",  "it", "for", "", "pop") 
 	ac2 := CreateAccountObject("2", "dog", "his", "11",  "is", "", "looking", "Zip string") 
 	ac3 := CreateAccountObject("3","cool", "Pony", "10",  "hello", "me", "your", "") 
@@ -108,7 +122,7 @@ func testAddAccounts() {
 	errCheck(err)
 	fmt.Println(result)
 
-}
+}*/
 
 func errCheck(e error) {
 	if e != nil {

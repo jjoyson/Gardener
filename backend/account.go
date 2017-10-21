@@ -64,7 +64,7 @@ func CreateAccountObject (ID string, FirstName string, LastName string, StreetNu
 }
 
 type Account struct {
-	ID string 
+	ID string `json:"_id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Address  `json:"address"`
@@ -76,5 +76,22 @@ type Address   struct {
 	City         string `json:"city"`
 	State        string `json:"state"`
 	Zip          string `json:"zip"` 
-} 
+}
+
+type NoIDAccount struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Address  `json:"address"`
+}
+
+type ResponseAccount struct {
+	Code          int    `json:"code"`
+	Message       string `json:"message"`
+	ObjectCreated struct {
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Address    `json:"address"`
+		ID string `json:"_id"`
+	} `json:"objectCreated"`
+}
 
