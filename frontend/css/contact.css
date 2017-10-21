@@ -1,0 +1,39 @@
+body {
+    background-image: url("pics/Head3.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: gray;
+    opacity:.8;
+    font-family: Papyrus, fantasy;
+}
+
+li {
+    float: left;
+    font-family: Papyrus, fantasy;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: black;
+    opacity: .8;
+}
+
+.active {
+    background-color: rgb(237, 171, 48);
+}
