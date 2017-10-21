@@ -10,9 +10,7 @@ func CreateAccountObject (ID string, FirstName string, LastName string, StreetNu
 			StreetName: "",
 			City: "",
 			State: "",
-			Zip: "",
-		}
-	}
+			Zip: ""}}
 
 	if (ID == "") {
 		account.ID = "none"
