@@ -7,9 +7,13 @@
     <link rel = "stylesheet" href="css/style.css">
   </head>
   <body>
-    <form action="info.html">
-    <button type="submit">Back</button>
-    </form>
+      <ul>
+          <li><a href="info.html">Home</a></li>
+          <li><a href="news.html">News</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="about.html">About</a></li>
+          <li class="active" style="float:right"><a href="index.html">Sign Up/Sign In</a></li>
+      </ul>
     <div class="container">
       <h1 class ="donor">Sign Up / Sign In </h1>
       <div class="wrapper animated bounceInLeft">
@@ -52,8 +56,8 @@
             <input type='text' placeholder = "Zip/Postal" id='zip'>
           </p>
           <p>
-            <label>Check if lender<input type='radio' name='h1' id='sBox'></label>
-            <label>Check if borrower<input type='radio' name='h1' id='sBox1'></label>
+            <input type='radio' name='h1' id='sBox'><label for="sBox">Check if lender</label>
+            <input type='radio' name='h1' id='sBox1'><label for='sBox1'>Check if borrower</label>
           </p>
         </form>
         <p>
