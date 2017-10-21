@@ -1,6 +1,6 @@
 package main
 
-func CreateAccountObject (ID string, FirstName string, LastName string, StreetNumber string,  StreetName string, City string, State string, Zip string) (Account) {
+func CreateAccountObject (ID string, FirstName string, LastName string, Email string, Password string, StreetNumber string,  StreetName string, City string, State string, Zip string) (Account) {
 	account := Account{
         ID: "",
 		FirstName: "", 
@@ -28,6 +28,18 @@ func CreateAccountObject (ID string, FirstName string, LastName string, StreetNu
 		account.LastName = "none"
 	} else {
 		account.LastName = LastName
+	}
+
+	if (Email  == "") {
+		account.Email = "none"
+	} else {
+		account.Email = Email
+	}
+
+	if (Password  == "") {
+		account.Password = "none"
+	} else {
+		account.Password = Password
 	}
 
 	if (StreetNumber == "") {
@@ -67,6 +79,8 @@ type Account struct {
 	ID string `json:"_id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
+	Email string `json:"email"`
+	Password string `json:"password"`
 	Address  `json:"address"`
 }
 
@@ -79,6 +93,14 @@ type Address   struct {
 }
 
 type NoIDAccount struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email string `json:"email"`
+	Password string `json:"password"`
+	Address  `json:"address"`
+}
+
+type NessieAccount struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Address  `json:"address"`

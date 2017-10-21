@@ -45,10 +45,11 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
     var noIDAccount NoIDAccount
 	_ = json.NewDecoder(r.Body).Decode(&noIDAccount)
 
-//-----------------------Create post request to Nessie-------------------------------------------------------
+ //-----------------------Create post request to Nessie-------------------------------------------------------
 
-	var jsonStr, _ = json.Marshal(noIDAccount)
-	fmt.Println(noIDAccount)
+ 	toBeSent := NessieAccount{noIDAccount.FirstName, noIDAccount.LastName, noIDAccount.Address}
+	var jsonStr, _ = json.Marshal(toBeSent)
+	fmt.Println(toBeSent)
 	req, err := http.NewRequest("POST", CUST_URL, bytes.NewBuffer(jsonStr))
 	errCheck(err)
     req.Header.Set("Content-Type", "application/json")
@@ -63,9 +64,9 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	var response ResponseAccount
 	_ = json.NewDecoder(resp.Body).Decode(&response)
 	fmt.Println(response)
-	account := CreateAccountObject(response.ObjectCreated.ID, noIDAccount.FirstName, noIDAccount.LastName, noIDAccount.StreetNumber,  noIDAccount.StreetName, noIDAccount.City, noIDAccount.State, noIDAccount.Zip)
+	account := CreateAccountObject(response.ObjectCreated.ID, noIDAccount.FirstName, noIDAccount.LastName, noIDAccount.Email, noIDAccount.Password, noIDAccount.StreetNumber,  noIDAccount.StreetName, noIDAccount.City, noIDAccount.State, noIDAccount.Zip)
   
-//-------------Save it to mongo DB----------------------------------------------------------------------------
+ //-------------Save it to mongo DB----------------------------------------------------------------------------
 
 	if (params["collection"] == "loaners") {
 		responce, err := GetLoanersCollection().UpsertId(account.ID, account)
