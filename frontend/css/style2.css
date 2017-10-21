@@ -1,0 +1,83 @@
+body {
+    background-image: url("pics/Head3.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+li{
+    font-family: Times New Roman, Georgia, Serif;
+    padding:10px;
+    list-style:none;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: gray;
+    opacity:.8;
+    font-family: Papyrus, fantasy;
+}
+
+.class1 li {
+    float: left;
+    padding: 0;
+    font-family: Papyrus, fantasy;
+}
+
+.class1 li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.class1 li a:hover:not(.active) {
+    background-color: black;
+    opacity: .8;
+}
+
+.active {
+    background-color: rgb(237, 171, 48);
+}
+
+div{
+    z-index:12;
+    border:solid black 3px;
+    background:white;
+    opacity:0.9;
+}
+
+
+.balance{
+    border:solid black 3px;
+    position:absolute;
+    z-index:13;
+    height:100px; 
+    bottom: 365px;
+    width:250px; 
+    left:1000px
+}
+
+.this{
+    position:relative;
+    right:-1000px;
+    top:5px; 
+ 
+    
+}
+
+.that{
+    position:relative;
+    top:50px;
+}
+
+p{
+    padding-left: 10px;
+}
+
+

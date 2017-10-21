@@ -1,0 +1,199 @@
+*{
+  box-sizing: border-box;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: gray;
+  opacity:.8;
+  font-family: Papyrus, fantasy;
+}
+
+li {
+  float: left;
+  font-family: Papyrus, fantasy;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: black;
+  opacity: .8;
+}
+
+.active {
+  background-color: rgb(237, 171, 48);
+}
+
+
+.content h1{
+  text-align:center;
+  padding-top:10px;
+  padding-bottom:10px;
+  font-family: Papyrus, fantasy;
+  line-height: 0.7;
+  color:black;
+}
+body{ 
+  background:url("pics/head3.jpg");
+  background-size:cover;
+  background-position:center;
+  color: #3e3b4b;
+  line-height: 1.6;
+  font-family: "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
+  padding:30px;
+}
+
+.donor{
+  color:#fff;
+  text-align:right; 
+}
+
+.container{
+  max-width: 1170px;
+  margin-left:auto;
+  margin-right: auto;
+  padding:1em;
+  z-index: 1;
+}
+
+ol{
+  list-style: square;
+  padding:10px;
+}
+
+.donation{
+  text-align: center;
+}
+
+.wrapper{
+  box-shadow: 0 0 20px 0 rgba(72, 94, 116, 0.7);
+}
+
+.wrapper > *{
+  padding:1em;
+}
+
+.creationed{
+  background:#c9e6ff;
+  opacity: 0.8;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.creationed h3, .company-info ol{
+  text-align: center;
+  margin: 0;
+}
+
+.contact{
+  background:#e4fff5;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/*form styles */
+
+.contact form{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+.contact form label{
+  display:block;
+}
+.contact form p{
+  margin:0px;
+}
+
+button{
+  background:#c9e6ff;
+  border-radius:5px;
+  height:35px;
+  width:55px;
+  border:0;
+}
+button:hover, button:focus{
+  background: #24619b;
+  outline:0;
+  transition: background-color, 0.5s ease-out;
+}
+
+button:not( :hover){
+  background:#c9e6ff;
+  border:0;
+  transition: background-color, 0.5s ease-out;
+}
+
+.contact form .full{
+  grid-column: 1 / 3;
+}
+
+.contact form button, .contact form input, .contact form textarea{
+  width:100%;
+  padding:1em;
+  border:1px solid #c9e6ff;
+}
+
+.contact form button{
+  background:#c9e6ff;
+  border:0;
+  text-transform: uppercase;
+}
+
+.contact form button:hover, .contact form button:focus{
+  background: #24619b;
+  outline:0;
+  transition: background-color, 0.5s ease-out;
+}
+
+.contact form button:not( :hover){
+  background:#c9e6ff;
+  border:0;
+  transition: background-color, 0.5s ease-out;
+}
+
+
+/*large Screen */
+
+@media(min-width:700px){
+  .wrapper{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+  .creationed{
+    border-top-right-radius: 0px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  .wrapper > *{
+    padding: 2em;
+  }
+
+  .company-info h3, .company-info ul, .brand{
+    text-align:left;
+  }
+
+  .contact{
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 0px;
+  }
+}
+
+.submitted{
+  background:#79c879;
+  color: #ffffff;
+  text-align:center;
+  padding:10px;
+  display:none;
+}
