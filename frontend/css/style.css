@@ -2,7 +2,8 @@
   box-sizing: border-box;
 }
 
-ul {
+
+.this {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -12,12 +13,12 @@ ul {
   font-family: Papyrus, fantasy;
 }
 
-li {
+.this li {
   float: left;
   font-family: Papyrus, fantasy;
 }
 
-li a {
+.this li a {
   display: block;
   color: white;
   text-align: center;
@@ -25,7 +26,7 @@ li a {
   text-decoration: none;
 }
 
-li a:hover:not(.active) {
+.this li a:hover:not(.active) {
   background-color: black;
   opacity: .8;
 }
@@ -34,6 +35,9 @@ li a:hover:not(.active) {
   background-color: rgb(237, 171, 48);
 }
 
+.that{
+  list-style:none;
+}
 
 .content h1{
   text-align:center;

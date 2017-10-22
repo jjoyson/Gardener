@@ -1,0 +1,25 @@
+{
+  "name": "gardener",
+  "version": "1.0.0",
+  "description": "",
+  "main": "post.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joeySchentrup/Gardener.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joeySchentrup/Gardener/issues"
+  },
+  "homepage": "https://github.com/joeySchentrup/Gardener#readme",
+  "dependencies": {
+    "query-string": "^5.0.0",
+    "querystring": "^0.2.0",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {}
+}
