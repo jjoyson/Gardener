@@ -81,7 +81,7 @@ func createPoolAccount() {
 
 func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	
-	newPayment := Payment{ThePoolID, "Credit/Debit Card", time.Now().String(), u.Amount, "Donation made to pool"}
+	newPayment := Payment{ThePoolID, "balance", time.Now().String(), u.Amount, "Donation made to pool"}
 	url := "http://api.reimaginebanking.com/accounts/" + id + "/purchases?key=542922f7bba311ded255ef44e29df65f"
 
 	var jsonStr, _ = json.Marshal(newPayment)
@@ -95,11 +95,11 @@ func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	errCheck(err)
 	defer resp.Body.Close()
 	
-	var webPage errorOb
+	var webPage string
 	//fmt.Println(resp.Body)
 	_ = json.NewDecoder(resp.Body).Decode(&webPage)
 	fmt.Println(webPage)
-	return "webPage"
+	return webPage
 }
 
 func createTempAccount(id string, u UnprocessedPayment) (string) {	
