@@ -99,7 +99,7 @@ func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	//fmt.Println(resp.Body)
 	_ = json.NewDecoder(resp.Body).Decode(&webPage)
 	fmt.Println(webPage)
-	return webPage
+	return "webPage"
 }
 
 func createTempAccount(id string, u UnprocessedPayment) (string) {	
