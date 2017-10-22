@@ -1,11 +1,9 @@
-var querystring = require('querystring');
 var http = require('http');
-var fs = require('fs');
 
     var data = JSON.stringify({
-        first_name: "1234",
-        last_name: "456",
-        email: "jschentrup@rocketmail.com",
+        first_name: "John",
+        last_name: "Smith",
+        email: "jithinjoyson1997@gmail.com",
         password: "password",
         address: {
         street_number: "13651",

@@ -18,6 +18,8 @@
   "homepage": "https://github.com/joeySchentrup/Gardener#readme",
   "dependencies": {
     "query-string": "^5.0.0",
-    "querystring": "^0.2.0"
-  }
+    "querystring": "^0.2.0",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {}
 }
