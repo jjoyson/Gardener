@@ -25,7 +25,7 @@ func makePayment(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(result)
 
 		resp := createTempAccount(result.ID, unprocessedPayment)
-		fmt.Println(resp)
+		//fmt.Println(resp)
 		if (resp != "") {
 			sendPaymentToNessie(unprocessedPayment, resp)
 			json.NewEncoder(w).Encode("Payment Processed")
@@ -56,7 +56,7 @@ func createPoolAccount() {
 
  //-----------------------Create post request to Nessie-------------------------------------------------------
 
- 	merchant := Merchant{"The Big Pool", []string{"Charity"}, account.Address, Geocode{1, 1}}
+ 	merchant := Merchant{"The Big Pool", []string{"Charity"}, account.Address, Geocode{1.0, 1.0}}
 	var jsonStr, _ = json.Marshal(merchant)
 	req, err := http.NewRequest("POST", "http://api.reimaginebanking.com/merchants?key=542922f7bba311ded255ef44e29df65f", bytes.NewBuffer(jsonStr))
 	errCheck(err)
@@ -95,8 +95,8 @@ func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	errCheck(err)
 	defer resp.Body.Close()
 	
-	var webPage string
-	fmt.Println(resp.Body)
+	var webPage errorOb
+	//fmt.Println(resp.Body)
 	_ = json.NewDecoder(resp.Body).Decode(&webPage)
 	fmt.Println(webPage)
 	return webPage
@@ -115,13 +115,13 @@ func createTempAccount(id string, u UnprocessedPayment) (string) {
 	
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	fmt.Println(resp.Body)
+	//fmt.Println(resp.Body)
 	errCheck(err)
 	defer resp.Body.Close()
 	
 	var paymentMeathodRsp PaymentMeathodRsp
 	_ = json.NewDecoder(resp.Body).Decode(&paymentMeathodRsp)
-	fmt.Println(paymentMeathodRsp)
+	//fmt.Println(paymentMeathodRsp)
 	if (paymentMeathodRsp.Code < 400) { return paymentMeathodRsp.ObjectCreated.ID }
 	return ""
 }

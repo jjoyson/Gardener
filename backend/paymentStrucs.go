@@ -68,3 +68,9 @@ type UnprocessedPayment struct {
 	Amount float64 `json:"amount"`
 	CreditCardNumber string `json:"credit_card_number"`
 }
+
+type errorOb struct {
+	Code    int      `json:"code"`
+	Message string   `json:"message"`
+	Culprit []string `json:"culprit"`
+}
