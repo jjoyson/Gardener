@@ -15,14 +15,17 @@ func makePayment(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
     var unprocessedPayment UnprocessedPayment
 	_ = json.NewDecoder(r.Body).Decode(&unprocessedPayment)
+	fmt.Println(unprocessedPayment)
 
 	var result Account
 	
 	if (params["collection"] == "loaners") {
 		err := GetLoanersCollection().FindId(params["id"]).One(&result)
 		errCheck(err)
+		fmt.Println(result)
 
 		resp := createTempAccount(result.ID, unprocessedPayment)
+		fmt.Println(resp)
 		if (resp != "") {
 			sendPaymentToNessie(unprocessedPayment, resp)
 			json.NewEncoder(w).Encode("Payment Processed")
@@ -64,7 +67,6 @@ func createPoolAccount() {
 	resp, err := client.Do(req)
 	errCheck(err)
 	defer resp.Body.Close()
-	fmt.Println(resp.Body)
 	
 	var response RspMerchant
 	_ = json.NewDecoder(resp.Body).Decode(&response)
@@ -80,7 +82,6 @@ func createPoolAccount() {
 func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	
 	newPayment := Payment{ThePoolID, "Credit/Debit Card", time.Now().String(), u.Amount, "Donation made to pool"}
-
 	url := "http://api.reimaginebanking.com/accounts/" + id + "/purchases?key=542922f7bba311ded255ef44e29df65f"
 
 	var jsonStr, _ = json.Marshal(newPayment)
@@ -95,7 +96,9 @@ func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	defer resp.Body.Close()
 	
 	var webPage string
+	fmt.Println(resp.Body)
 	_ = json.NewDecoder(resp.Body).Decode(&webPage)
+	fmt.Println(webPage)
 	return webPage
 }
 
