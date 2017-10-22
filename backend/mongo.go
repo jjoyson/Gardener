@@ -4,7 +4,7 @@ import (
 	"labix.org/v2/mgo"
 )
 
-var MONGODB_URL string = "192.168.99.100:32768"
+var MONGODB_URL string = "mongo:27017"
 var DB_NAME string = "Gardener"
 var LOANERS_NAME string = "Loaners"
 var DONORS_NAME string = "Donors"
