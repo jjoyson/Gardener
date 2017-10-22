@@ -1,45 +1,38 @@
-var http = require('http');
+var http = require("http");
 
-var options = {
-    host: '45.55.182.73',
-    port: 8000,
-    path: '/account/loaner',
+var d = '59ec330eb390353c953a1615';
+
+var optionsB = {
+  timeout: 10000,
+  host: '45.55.182.73',
+  port: 8000,
+  path: '/account/donors/'+d,
   method: 'GET',
- headers:{
-    'Content-Type': 'application/x-www-form-urlencoded',
-    }
+  headers: {
+    'Content-Type': 'application/json'
+  }
 };
 
-var q = {email:"jithinjoyson1997@gmail.com"};
-
-var options = {
-    uri:'http://45.55.182.73:8000/account/leanders/2',
-    host: '45.55.182.73',
-    port: 8000,
-    path: '/account/donor',
+var optionsA = {
+  host: '45.55.182.73',
+  port: 8000,
+  path: '/account/loaners/'+d,
   method: 'GET',
- headers:{
-    'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    qs:q
+  headers: {
+    "Content-Type": "application/json"
+  }
 };
 
-var req = http.get(options, function(res) {
-  console.log('STATUS: ' + res.statusCode);
-  console.log('HEADERS: ' + JSON.stringify(res.headers));
+var req = http.request(options, function(res) {
+  //res.setEncoding("UTF-8");
+  var response = "";
+  res.on("data", function(chunk){
+    response += chunk;
+  });
 
-  // Buffer the body entirely for processing as a whole.
-  var bodyChunks = [];
-  res.on('data', function(chunk) {
-    // You can process streamed parts here...
-    bodyChunks.push(chunk);
-  }).on('end', function() {
-    var body = Buffer.concat(bodyChunks);
-    console.log('BODY: ' + body);
-    // ...and/or process the entire body here.
-  })
+  res.on("end", function(){
+    console.log(response);
+  });
+  var data = JSON.stringify(response);
 });
-
-req.on('error', function(e) {
-  console.log('ERROR: ' + e.message);
-});
+req.end();
