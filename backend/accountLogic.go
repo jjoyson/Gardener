@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"encoding/json"
 	"bytes"
-	"./bson"
     "github.com/gorilla/mux"
 )
 
@@ -31,11 +30,11 @@ func getEmailAccount(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var result interface{}
 	if (params["collection"] == "loaners") {
-		err := GetLoanersCollection().Find(bson.M{"email": params["email"]}).One(&result)
+		err := GetLoanersCollection().Find(M{"email": params["email"]}).One(&result)
 		errCheck(err)
 		json.NewEncoder(w).Encode(result)
 	} else if (params["collection"] == "donors") {
-		err := GetDonorsCollection().Find(bson.M{"email": params["email"]}).One(&result)
+		err := GetDonorsCollection().Find(M{"email": params["email"]}).One(&result)
 		errCheck(err)
 		json.NewEncoder(w).Encode(result)
 	} else {
@@ -49,13 +48,13 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&noIDAccount)
 
 	if (params["collection"] == "loaners" ) {
-		n, _ := GetLoanersCollection().Find(bson.M{"email": noIDAccount.Email}).Count()
+		n, _ := GetLoanersCollection().Find(M{"email": noIDAccount.Email}).Count()
 		if(n != 0){
 			http.Error(w, "Email already used!", http.StatusBadRequest)
 			return
 		}
 	} else if (params["collection"] == "donors") {
-		n, _ := GetDonorsCollection().Find(bson.M{"email": noIDAccount.Email}).Count()
+		n, _ := GetDonorsCollection().Find(M{"email": noIDAccount.Email}).Count()
 		if(n != 0){
 			http.Error(w, "Email already used!", http.StatusBadRequest)
 			return
