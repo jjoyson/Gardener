@@ -15,17 +15,14 @@ func makePayment(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
     var unprocessedPayment UnprocessedPayment
 	_ = json.NewDecoder(r.Body).Decode(&unprocessedPayment)
-	//fmt.Println(unprocessedPayment)
 
 	var result Account
 	
 	if (params["collection"] == "loaners") {
 		err := GetLoanersCollection().FindId(params["id"]).One(&result)
 		errCheck(err)
-		//fmt.Println(result)
 
 		resp := createTempAccount(result.ID, unprocessedPayment)
-		//fmt.Println(resp)
 		if (resp != "") {
 			sendPaymentToNessie(unprocessedPayment, resp)
 			json.NewEncoder(w).Encode("Payment Processed")
@@ -70,7 +67,6 @@ func createPoolAccount() {
 	
 	var response RspMerchant
 	_ = json.NewDecoder(resp.Body).Decode(&response)
-	fmt.Println(response)
 	ThePoolID = response.ObjectCreated.ID
 	account.ID = response.ObjectCreated.ID
   
@@ -79,7 +75,7 @@ func createPoolAccount() {
 	GetLoanersCollection().UpsertId(account.ID, account)
 }
 
-func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
+func sendPaymentToNessie(u UnprocessedPayment, id string)  {
 	
 	newPayment := Payment{ThePoolID, "balance", time.Now().String(), u.Amount, "Donation made to pool"}
 	url := "http://api.reimaginebanking.com/accounts/" + id + "/purchases?key=542922f7bba311ded255ef44e29df65f"
@@ -95,11 +91,10 @@ func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	errCheck(err)
 	defer resp.Body.Close()
 	
-	var webPage errorOb
-	//fmt.Println(resp.Body)
-	_ = json.NewDecoder(resp.Body).Decode(&webPage)
-	fmt.Println(webPage)
-	return "webPage"
+	var res errorOb
+	_ = json.NewDecoder(resp.Body).Decode(&res)
+	if (res.Code > 299) { fmt.Println("In payment logic, error on payment submit: " + res.Message)  }
+
 }
 
 func createTempAccount(id string, u UnprocessedPayment) (string) {	
@@ -115,13 +110,11 @@ func createTempAccount(id string, u UnprocessedPayment) (string) {
 	
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	//fmt.Println(resp.Body)
 	errCheck(err)
 	defer resp.Body.Close()
 	
 	var paymentMeathodRsp PaymentMeathodRsp
 	_ = json.NewDecoder(resp.Body).Decode(&paymentMeathodRsp)
-	//fmt.Println(paymentMeathodRsp)
 	if (paymentMeathodRsp.Code < 400) { return paymentMeathodRsp.ObjectCreated.ID }
 	return ""
 }
