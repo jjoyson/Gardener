@@ -1,3 +1,5 @@
+package main
+
 type TempAccount struct {
 	Type          string `json:"type"`
 	Nickname      string `json:"nickname"`

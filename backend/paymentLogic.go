@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"encoding/json"
+	"bytes"
 )
 
 func getPayAccount(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +22,7 @@ func makePayment(w http.ResponseWriter, r *http.Request) {
 }
 
 func createPoolAccount() {
-	account := CreateAccountObject ("placeholder", "The Big", "Pool", "bigmoney@youwishyouwhereme.com", "password", "1",  "no", "Merca", "FL", "699601")
+	account := CreateAccountObject ("placeholder", "TheBig", "Pool", "bigmoney@youwishyouwhereme.com", "password", "1",  "no", "Merca", "FL", "69961")
 
  //-----------------------Create post request to Nessie-------------------------------------------------------
 
@@ -44,7 +47,7 @@ func createPoolAccount() {
   
  //-------------Save it to mongo DB----------------------------------------------------------------------------
 
-	responce, err := GetLoanersCollection().UpsertId(account.ID, account)
+	GetLoanersCollection().UpsertId(account.ID, account)
 }
 
 func createPayAccount(id string, collection string) {
