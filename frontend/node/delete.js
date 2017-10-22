@@ -4,7 +4,7 @@ var d = '59ec1b72b390353c953a160f';
 
 
 var optionsA = {
-    host: '45.55.182.73',
+    host: '162.243.160.168',
     port: 8000,
     path: '/account/loaners/'+d,
   method: 'DELETE',
@@ -14,7 +14,7 @@ var optionsA = {
 };
 
 var optionsB = {
-      host: '45.55.182.73',
+      host: '162.243.160.168',
       port: 8000,
       path: '/account/donors/'+d,
   method: 'DELETE',

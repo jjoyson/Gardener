@@ -3,6 +3,7 @@ var http = require('http');
 var bodyParser = require('body-parser');
 var app     = express();
 var fs = require('fs');
+var a;
 
 //Note that in version 4 of express, express.bodyParser() was
 //deprecated in favor of a separate 'body-parser' module.
@@ -27,7 +28,7 @@ app.post('/myaction', function(req, res) {
             });
     
         var optionsA = {
-            host: '45.55.182.73',
+            host: '162.243.160.168',
             port: 8000,
             path: '/account/loaners',
           method: 'POST',
@@ -37,7 +38,7 @@ app.post('/myaction', function(req, res) {
         };
     
         var optionsB = {
-            host: '45.55.182.73',
+            host: '162.243.160.168',
             port: 8000,
             path: '/account/donors',
           method: 'POST',
@@ -47,7 +48,7 @@ app.post('/myaction', function(req, res) {
         };
         
         var options;
-        var a = req.body.h1;
+        a = req.body.h1;
         if(req.body.h1)
             options = optionsB;
         else
@@ -56,7 +57,7 @@ app.post('/myaction', function(req, res) {
         var req = http.request(options, function(res) {
             res.setEncoding('utf8');
             res.on(data, function (chunk) {
-                console.log("body: " + chunk);
+                console.log("body: " + chunk);   
             });
         });
         req.write(data);
@@ -72,8 +73,9 @@ app.post('/myaction', function(req, res) {
             'Location': 'http://45.55.182.73:8000/borrowerSignedln.html'});
           response.end();
         }
+       
 });
 
 app.listen(8080, function() {
-  console.log('Server running at http://127.0.0.1:8080/');
+  console.log('Server running at http://localhost:8080');
 });

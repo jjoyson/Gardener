@@ -4,7 +4,7 @@ var d = '59ec330eb390353c953a1615';
 
 var optionsB = {
   timeout: 10000,
-  host: '45.55.182.73',
+  host: '162.243.160.168',
   port: 8000,
   path: '/account/donors/'+d,
   method: 'GET',
@@ -14,7 +14,7 @@ var optionsB = {
 };
 
 var optionsA = {
-  host: '45.55.182.73',
+  host: '162.243.160.168',
   port: 8000,
   path: '/account/loaners/'+d,
   method: 'GET',
