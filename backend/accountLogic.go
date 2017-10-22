@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"encoding/json"
 	"bytes"
@@ -59,13 +58,15 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Email already used!", http.StatusBadRequest)
 			return
 		}
+	} else {
+		http.Error(w, "That collections does not exist!", http.StatusBadRequest)
+		return
 	}
 
  //-----------------------Create post request to Nessie-------------------------------------------------------
 
  	toBeSent := NessieAccount{noIDAccount.FirstName, noIDAccount.LastName, noIDAccount.Address}
 	var jsonStr, _ = json.Marshal(toBeSent)
-	fmt.Println(toBeSent)
 	req, err := http.NewRequest("POST", CUST_URL, bytes.NewBuffer(jsonStr))
 	errCheck(err)
     req.Header.Set("Content-Type", "application/json")
@@ -75,11 +76,9 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	resp, err := client.Do(req)
 	errCheck(err)
 	defer resp.Body.Close()
-	fmt.Println(resp.Body)
 	
 	var response ResponseAccount
 	_ = json.NewDecoder(resp.Body).Decode(&response)
-	fmt.Println(response)
 	account := CreateAccountObject(response.ObjectCreated.ID, noIDAccount.FirstName, noIDAccount.LastName, noIDAccount.Email, noIDAccount.Password, noIDAccount.StreetNumber,  noIDAccount.StreetName, noIDAccount.City, noIDAccount.State, noIDAccount.Zip)
   
  //-------------Save it to mongo DB----------------------------------------------------------------------------

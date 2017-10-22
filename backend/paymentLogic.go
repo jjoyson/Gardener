@@ -5,31 +5,57 @@ import (
 	"net/http"
 	"encoding/json"
 	"bytes"
+	"github.com/gorilla/mux"
+	"time"
 )
 
-func getPayAccount(w http.ResponseWriter, r *http.Request) {
-	//needs id string, collection string
-
-}
-
-func getPaymentHistory(w http.ResponseWriter, r *http.Request) {
-	//needs id string, collection string
-
-}
+var ThePoolID string = "nil"
 
 func makePayment(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+    var unprocessedPayment UnprocessedPayment
+	_ = json.NewDecoder(r.Body).Decode(&unprocessedPayment)
 
+	var result Account
+	
+	if (params["collection"] == "loaners") {
+		err := GetLoanersCollection().FindId(params["id"]).One(&result)
+		errCheck(err)
+
+		resp := createTempAccount(result.ID, unprocessedPayment)
+		if (resp != "") {
+			sendPaymentToNessie(unprocessedPayment, resp)
+			json.NewEncoder(w).Encode("Payment Processed")
+		} else {
+			http.Error(w, "Ivalid Account info!", http.StatusBadRequest)
+		}
+
+	} else if (params["collection"] == "donors") {
+		err := GetDonorsCollection().FindId(params["id"]).One(&result)
+		errCheck(err)
+		
+		resp := createTempAccount(result.ID, unprocessedPayment)
+		if (resp != "") {
+			sendPaymentToNessie(unprocessedPayment, resp)
+			json.NewEncoder(w).Encode("Payment Processed")
+		} else {
+			http.Error(w, "Ivalid Account info!", http.StatusBadRequest)
+		}
+
+	} else {
+		http.Error(w, "That collections does not exist!", http.StatusBadRequest)
+		return
+	}
 }
 
 func createPoolAccount() {
-	account := CreateAccountObject ("placeholder", "TheBig", "Pool", "bigmoney@youwishyouwhereme.com", "password", "1",  "no", "Merca", "FL", "69961")
+	account := CreateAccountObject("placeholder", "TheBig", "Pool", "bigmoney@youwishyouwhereme.com", "password", "1",  "no", "Merca", "FL", "69961")
 
  //-----------------------Create post request to Nessie-------------------------------------------------------
 
- 	toBeSent := NessieAccount{account.FirstName, account.LastName, account.Address}
-	var jsonStr, _ = json.Marshal(toBeSent)
-	fmt.Println(toBeSent)
-	req, err := http.NewRequest("POST", CUST_URL, bytes.NewBuffer(jsonStr))
+ 	merchant := Merchant{"The Big Pool", []string{"Charity"}, account.Address, Geocode{1, 1}}
+	var jsonStr, _ = json.Marshal(merchant)
+	req, err := http.NewRequest("POST", "http://api.reimaginebanking.com/merchants?key=542922f7bba311ded255ef44e29df65f", bytes.NewBuffer(jsonStr))
 	errCheck(err)
     req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
@@ -40,16 +66,57 @@ func createPoolAccount() {
 	defer resp.Body.Close()
 	fmt.Println(resp.Body)
 	
-	var response ResponseAccount
+	var response RspMerchant
 	_ = json.NewDecoder(resp.Body).Decode(&response)
 	fmt.Println(response)
-	account = CreateAccountObject(response.ObjectCreated.ID, account.FirstName, account.LastName, account.Email, account.Password, account.StreetNumber,  account.StreetName, account.City, account.State, account.Zip)
+	ThePoolID = response.ObjectCreated.ID
+	account.ID = response.ObjectCreated.ID
   
  //-------------Save it to mongo DB----------------------------------------------------------------------------
 
 	GetLoanersCollection().UpsertId(account.ID, account)
 }
 
-func createPayAccount(id string, collection string) {
+func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 	
+	newPayment := Payment{ThePoolID, "Credit/Debit Card", time.Now().String(), u.Amount, "Donation made to pool"}
+
+	url := "http://api.reimaginebanking.com/accounts/" + id + "/purchases?key=542922f7bba311ded255ef44e29df65f"
+
+	var jsonStr, _ = json.Marshal(newPayment)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	errCheck(err)
+    req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+	
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	errCheck(err)
+	defer resp.Body.Close()
+	
+	var webPage string
+	_ = json.NewDecoder(resp.Body).Decode(&webPage)
+	return webPage
+}
+
+func createTempAccount(id string, u UnprocessedPayment) (string) {	
+	tempAccount := PaymentMeathod{"temp", "temp", 0, 0, u.CreditCardNumber}
+
+	url := "http://api.reimaginebanking.com/customers/" + id + "/accounts?key=542922f7bba311ded255ef44e29df65f"
+
+	var jsonStr, _ = json.Marshal(tempAccount)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	errCheck(err)
+    req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+	
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	errCheck(err)
+	defer resp.Body.Close()
+	
+	var paymentMeathodRsp PaymentMeathodRsp
+	_ = json.NewDecoder(resp.Body).Decode(&paymentMeathodRsp)
+	if (paymentMeathodRsp.Code < 400) { return paymentMeathodRsp.ObjectCreated.ID }
+	return ""
 }

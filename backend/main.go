@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 	"log"
-    "github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -17,8 +17,7 @@ func main() {
     router.HandleFunc("/account/{collection}", createAccount).Methods("POST") //in accountLogic.go
 	router.HandleFunc("/account/{collection}/{id}", deleteAccount).Methods("DELETE") //in accountLogic.go
 	
-	router.HandleFunc("/payments/{collection}/{id}", getPayAccount).Methods("GET")
-	router.HandleFunc("/payments/{collection}/{id}", getPaymentHistory).Methods("GET")
+	//router.HandleFunc("/payments/{id}", getPaymentHistory).Methods("GET")
     router.HandleFunc("/payments/{collection}/{id}", makePayment).Methods("POST") //creditcards
 	
 	log.Fatal(http.ListenAndServe(":8000", router))
