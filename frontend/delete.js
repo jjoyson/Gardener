@@ -23,6 +23,6 @@ var optionsB = {
     }
 };
 
-var request = http.request(options2);
+var request = http.request(optionsA);
 
 request.end();
