@@ -15,14 +15,14 @@ func makePayment(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
     var unprocessedPayment UnprocessedPayment
 	_ = json.NewDecoder(r.Body).Decode(&unprocessedPayment)
-	fmt.Println(unprocessedPayment)
+	//fmt.Println(unprocessedPayment)
 
 	var result Account
 	
 	if (params["collection"] == "loaners") {
 		err := GetLoanersCollection().FindId(params["id"]).One(&result)
 		errCheck(err)
-		fmt.Println(result)
+		//fmt.Println(result)
 
 		resp := createTempAccount(result.ID, unprocessedPayment)
 		fmt.Println(resp)
@@ -115,11 +115,13 @@ func createTempAccount(id string, u UnprocessedPayment) (string) {
 	
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	fmt.Println(resp.Body)
 	errCheck(err)
 	defer resp.Body.Close()
 	
 	var paymentMeathodRsp PaymentMeathodRsp
 	_ = json.NewDecoder(resp.Body).Decode(&paymentMeathodRsp)
+	fmt.Println(paymentMeathodRsp)
 	if (paymentMeathodRsp.Code < 400) { return paymentMeathodRsp.ObjectCreated.ID }
 	return ""
 }
