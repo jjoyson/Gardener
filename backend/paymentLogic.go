@@ -103,7 +103,7 @@ func sendPaymentToNessie(u UnprocessedPayment, id string) (string) {
 }
 
 func createTempAccount(id string, u UnprocessedPayment) (string) {	
-	tempAccount := PaymentMeathod{"temp", "temp", 0, 0, u.CreditCardNumber}
+	tempAccount := PaymentMeathod{"Credit Card", "temp", 0, 0, u.CreditCardNumber}
 
 	url := "http://api.reimaginebanking.com/customers/" + id + "/accounts?key=542922f7bba311ded255ef44e29df65f"
 
